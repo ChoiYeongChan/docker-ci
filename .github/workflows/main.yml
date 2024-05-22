@@ -24,7 +24,7 @@ jobs:
       - name: Get current version
         id: frontend-version
         run: |
-          CURRENT_VERSION=$(grep -oP 'codingalice/grayhound:\K[0-9]+\.[0-9]+' websource/deploy.yaml)
+          CURRENT_VERSION=$(grep -oP 'codingalice/grayhound:\K[0-9]+\.[0-9]+' ./grayround.yaml)
           if [ -z "$CURRENT_VERSION" ]; then
             CURRENT_VERSION=1.0
           fi
@@ -36,11 +36,11 @@ jobs:
           docker push codingalice/grayhound:${{ env.NEW_VERSION }}
       - name: Update deploy.yaml
         run: |
-          sed -i 's|image: codingalice/grayhound:.*|image: codingalice/grayhound:${{ env.NEW_VERSION }}|' websource/deploy.yaml
+          sed -i 's|image: codingalice/grayhound:.*|image: codingalice/grayhound:${{ env.NEW_VERSION }}|' ./grayround.yaml
       - name: Commit and push changes
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-          git add websource/deploy.yaml
+          git add ./grayround.yaml
           git commit -m "Update Docker images and change image to version ${{ env.NEW_VERSION }}"
           git push origin main
